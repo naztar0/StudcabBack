@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
+use App\Models\User;
+use App\Models\Faculty;
+use App\Models\Speciality;
+use App\Models\Program;
+use App\Models\Cathedra;
+use App\Models\Specialization;
+use App\Models\Group;
+use App\Filters\UserFilters;
+use App\Http\Requests\UploadImageRequest;
+use App\Services\UserService;
+
+class UserController extends Controller
+{
+    public function __construct(private readonly UserService $service)
+    {
+    }
+    public function index(UserFilters $filters): Response
+    {
+        return response($filters->apply(User::class)
+            ->paginate($filters->itemsNum, ['*'], 'page', $filters->pageNum));
+    }
+
+    public function getProfile(User $user): Response
+    {
+        return response($this->service->getProfile($user));
+    }
+
+    public function getRecordBook(User $user, int $semester): Response
+    {
+        return response($this->service->getRecordBook($user, $semester));
+    }
+
+    public function getRating(User $user, int $semester): Response
+    {
+        return response($this->service->getRating($user, $semester));
+    }
+
+    public function getSyllabus(User $user, int $semester): Response
+    {
+        return response($this->service->getSyllabus($user, $semester));
+    }
+
+    public function uploadAvatar(UploadImageRequest $request, User $user, UserService $userService): Response
+    {
+        return response($user->update(['image' => $userService->saveImage($request->image)]));
+    }
+
+    public function getGroupUsers(Group $group): Response
+    {
+        return response($group->users()->get());
+    }
+
+    public function getSpecializationUsers(Specialization $specialization): Response
+    {
+        return response($specialization->groups()->with('users')->get());
+    }
+
+    public function getCathedraUsers(Cathedra $cathedra): Response
+    {
+        return response($cathedra->specializations()->with('groups.users')->get());
+    }
+
+    public function getProgramUsers(Program $program): Response
+    {
+        return response($program->cathedras()->with('specializations.groups.users')->get());
+    }
+
+    public function getSpecialityUsers(Speciality $speciality): Response
+    {
+        return response($speciality->programs()->with('cathedras.specializations.groups.users')->get());
+    }
+
+    public function getFacultyUsers(Faculty $faculty): Response
+    {
+        return response($faculty->specialities()->with('programs.cathedras.specializations.groups.users')->get());
+    }
+}

@@ -7,7 +7,7 @@ services:
         ports:
             - "9000:9000"
         volumes:
-            - ./:/var/www/html
+            - ./:/var/www/studcab-back
         networks:
             - app-net
         depends_on:
@@ -38,7 +38,7 @@ services:
             - "80:80"
             - "443:443"
         volumes:
-            - ./:/var/www/html
+            - ./:/var/www/studcab-back
             - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
         networks:
             - app-net

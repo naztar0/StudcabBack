@@ -20,10 +20,7 @@ docker-compose up -d
 ## Project setup
 
 ```
-docker-compose exec app composer install
-docker-compose exec app php artisan key:generate
 docker-compose exec app php artisan jwt:secret
-docker-compose exec web chown www-data:www-data -R /var/www/html/
 ```
 
 ## Rolling migrations

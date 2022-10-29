@@ -37,10 +37,12 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 Route::group(['prefix' => 'users'], function ($router) {
     Route::get('/{user}/profile', [UserController::class, 'getProfile']);
+    Route::get('/{user}/photo', [UserController::class, 'getPhoto']);
     Route::get('/{user}/record-book/{semester}', [UserController::class, 'getRecordBook']);
-    Route::get('{user}/rating/{semester}', [UserController::class, 'getRating']);
-    Route::get('{user}/syllabus/{semester}', [UserController::class, 'getSyllabus']);
+    Route::get('/{user}/rating/{semester}', [UserController::class, 'getRating']);
+    Route::get('/{user}/syllabus/{semester}', [UserController::class, 'getSyllabus']);
     Route::post('/{user}/avatar', [UserController::class, 'uploadAvatar']);
+    Route::post('/{user}/cover', [UserController::class, 'uploadCover']);
 });
 
 Route::group(['prefix' => 'groups'], function ($router) {

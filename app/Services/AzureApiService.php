@@ -50,9 +50,24 @@ class AzureApiService
 
     public function getUser(string $id): GraphUser
     {
-        return $this->app->createRequest('GET', '/users/'.$id)
+        return $this->app->createRequest('GET', "/users/$id")
             ->setReturnType(GraphUser::class)
             ->execute();
+    }
+
+    public function getUserPhoto(string $id, int $size=48): ?string
+    {
+        try {
+            return 'data:image/jpeg;base64,' . base64_encode(
+                $this->app->createRequest('GET', "/users/$id/photos/{$size}x{$size}/\$value")
+                ->execute()->getRawBody());
+        } catch (GuzzleException $e) {
+            if ($e->getCode() === 404) {
+                return null;
+            }
+        }
+
+        return null;
     }
 
     public function getUserCalendarEvents(User $user): array

@@ -21,6 +21,9 @@ class UserService
         if (!$khpiData) {
             return null;
         }
+        if (!$data['image']) {
+            $data['image'] = $this->azureService->getUserPhoto($user->microsoft_id);
+        }
         $data['year'] = intval($khpiData['kurs']);
         $data['middle_name'] = $khpiData['otch'];
         $data['train_level'] = $khpiData['train_level'];
@@ -52,6 +55,11 @@ class UserService
         ];
 
         return $data;
+    }
+
+    public function getPhoto(User $user): ?string
+    {
+        return $this->azureService->getUserPhoto($user->microsoft_id, 240);
     }
 
     public function getRecordBook(User $user, int $semester): array

@@ -31,6 +31,11 @@ class UserController extends Controller
         return response($this->service->getProfile($user));
     }
 
+    public function getPhoto(User $user): Response
+    {
+        return response($this->service->getPhoto($user));
+    }
+
     public function getRecordBook(User $user, int $semester): Response
     {
         return response($this->service->getRecordBook($user, $semester));
@@ -48,7 +53,12 @@ class UserController extends Controller
 
     public function uploadAvatar(UploadImageRequest $request, User $user, UserService $userService): Response
     {
-        return response($user->update(['image' => $userService->saveImage($request->image)]));
+        return response(tap($user)->update(['image' => $userService->saveImage($request->image)]));
+    }
+
+    public function uploadCover(UploadImageRequest $request, User $user, UserService $userService): Response
+    {
+        return response(tap($user)->update(['cover' => $userService->saveImage($request->image)]));
     }
 
     public function getGroupUsers(Group $group): Response

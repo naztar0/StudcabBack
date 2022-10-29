@@ -2,7 +2,7 @@ FROM nginx:stable-alpine
 
 LABEL maintainer="Nazar Taran"
 
-WORKDIR /var/www/studcab-back
+WORKDIR /var/www/html
 
 RUN set -x ; \
     addgroup -g 82 -S www-data ; \
@@ -11,5 +11,5 @@ COPY nginx.conf /etc/nginx/
 
 EXPOSE 80 443
 
-CMD chown www-data:www-data -R /var/www/studcab-back/ && \
+CMD chown www-data:www-data -R /var/www/html/ && \
     nginx -g 'daemon off;'
